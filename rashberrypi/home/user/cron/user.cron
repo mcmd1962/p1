@@ -1,0 +1,3 @@
+
+@reboot sleep 500; /home/user/bin/TransferFiles.sh  >> /tmp/TransferFiles.log  2>&1
+

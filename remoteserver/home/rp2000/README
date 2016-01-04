@@ -1,0 +1,6 @@
+ImportFiles.sh
+==============
+The password to the Postgres p1_readings database for write access must be set, see line 78 in script.
+
+Unfortunately this script is started manually every time the system is rebooted:
+    nohup ./ImportFiles.sh &

@@ -1,0 +1,42 @@
+General setup
+=============
+. On the rashberry pi:
+  + the P1 reader script is running which produces local data files in csv format and a log file by supervisor
+  + the local user crontab entry is started at the boot of the server to transfer these csv files to a remote server which is storing the data in a postgres database and is running a web server to display the data.
+
+. On the remote server
+  + A Postgres database is running to store in all the data in aggregated format.
+  + A apache webserver is running to display the data. A few simple reports are available.
+
+
+P1 reader script
+================
+The P1 reader script is run by supervisor, the relevant config file for this is in etc/supervisor/conf.d directory. This file must be edited to set the correct command and user.
+
+The P1reader script is located in home/user/bin/ and is called P1reader.py. This script is reading a P1 datagram which in my case looks something like:
+     /ISk52MT382-1003
+     1-0:1.8.1(00438.023*kWh)
+     1-0:1.8.2(00384.391*kWh)
+     1-0:2.8.1(00000.000*kWh)
+     1-0:2.8.2(00000.001*kWh)
+     0-0:96.14.0(0002)
+     1-0:1.7.0(0000.62*kW)
+     1-0:2.7.0(0000.00*kW)
+     0-0:17.0.0(0999.00*kW)
+     0-0:96.3.10(1)
+     0-0:96.13.1()
+     0-0:96.13.0()
+     !
+This script assumes that directory /home/user/data exists. This script assumes that the rashberry pi is running nginx and will create a simple web page with the last 10 measurements. It first checks whether the webserver is being used by checking the update time on file /var/log/nginx/access.log (line 337) before it writes this html file. The writing of the html file is done in print_html function. Code for this can be found at lines 45, 98-123, 337-345. Modify or deactivate where needed.
+
+
+Transfer files
+==============
+The P1 reader script is producing local files with data in csv format. These files
+Files are transferred to the remote server using scp. The script name is TransferFiles.sh.
+The script is started from cron, see file home/user/cron/user.cron
+
+usr/share/nginx/html/p1
+=======================
+The P1 reader script is trying to write a file in this directory with the last 10 measurements.
+

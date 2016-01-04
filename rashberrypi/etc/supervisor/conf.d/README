@@ -1,0 +1,5 @@
+Place custom configuration files for supervisor here. They
+will be read after the main configuration file in
+/etc/supervisor/supervisord.conf
+
+Note: in p1reader.conf, replace 'user' in 'command' and 'user' to whatever is appropriate.
